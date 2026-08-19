@@ -1,0 +1,17 @@
+{
+  "name": "expenseflow",
+  "version": "1.0.0",
+  "description": "A simple full-stack expense tracker with Node.js, Express and SQLite.",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "nodemon src/server.js"
+  },
+  "dependencies": {
+    "express": "^4.21.2",
+    "sqlite3": "^5.1.7"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.10"
+  }
+}

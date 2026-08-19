@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ExpenseFlow</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <main class="wrap">
+        <section class="hero">
+            <p class="tag">Simple Expense Management</p>
+            <h1>ExpenseFlow</h1>
+            <p>Track daily expenses, filter them, and understand where your money goes.</p>
+        </section>
+
+        <section class="card">
+            <h2>Add Expense</h2>
+
+            <form id="expFrm">
+                <div class="grid">
+                    <label>
+                        Amount
+                        <input id="amt" type="number" min="1" step="0.01" placeholder="500" required>
+                    </label>
+
+                    <label>
+                        Category
+                        <select id="cat" required>
+                            <option value="">Select category</option>
+                            <option>Food</option>
+                            <option>Transport</option>
+                            <option>Shopping</option>
+                            <option>Bills</option>
+                            <option>Education</option>
+                            <option>Other</option>
+                        </select>
+                    </label>
+
+                    <label>
+                        Date
+                        <input id="dat" type="date" required>
+                    </label>
+
+                    <label>
+                        Description
+                        <input id="des" type="text" placeholder="Dinner">
+                    </label>
+                </div>
+
+                <button type="submit">Add Expense</button>
+            </form>
+
+            <p id="msg"></p>
+        </section>
+
+        <section class="stats">
+            <div class="stat">
+                <span>Total Expense</span>
+                <strong id="tot">₹0</strong>
+            </div>
+
+            <div class="stat">
+                <span>Entries</span>
+                <strong id="cnt">0</strong>
+            </div>
+        </section>
+
+        <section class="card">
+            <div class="head">
+                <h2>Expenses</h2>
+
+                <div class="filters">
+                    <select id="filCat">
+                        <option value="">All categories</option>
+                        <option>Food</option>
+                        <option>Transport</option>
+                        <option>Shopping</option>
+                        <option>Bills</option>
+                        <option>Education</option>
+                        <option>Other</option>
+                    </select>
+
+                    <input id="filDat" type="date">
+                    <button id="clrBtn" type="button" class="secondary">Clear</button>
+                </div>
+            </div>
+
+            <div class="tableWrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Category</th>
+                            <th>Description</th>
+                            <th>Amount</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="expBody"></tbody>
+                </table>
+            </div>
+        </section>
+
+        <section class="card">
+            <h2>Category Summary</h2>
+            <div id="catSum" class="catSum"></div>
+        </section>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>
