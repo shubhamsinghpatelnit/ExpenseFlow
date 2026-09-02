@@ -1,192 +1,429 @@
-* {
+/* =========================================================
+   EXPENSEFLOW - MAIN CSS
+   ========================================================= */
+
+
+/* ---------------------------------------------------------
+   1. BODY / WHOLE PAGE
+   --------------------------------------------------------- */
+
+body {
+    /* Sets the font used on the entire page */
+    font-family: Arial, sans-serif;
+
+    /* Prevents content from becoming too wide */
+    max-width: 900px;
+
+    /* 40px space from top/bottom and centers page horizontally */
+    margin: 40px auto;
+
+    /* Space between page content and its edges */
+    padding: 20px;
+
+    /* Light background */
+    background-color: #f5f7fa;
+
+    /* Default text color */
+    color: #222;
+}
+
+
+/* ---------------------------------------------------------
+   2. MAIN HEADING
+   --------------------------------------------------------- */
+
+h1 {
+    /* Centers ExpenseFlow heading */
+    text-align: center;
+
+    /* Space below heading */
+    margin-bottom: 30px;
+}
+
+
+/* ---------------------------------------------------------
+   3. SECTION HEADINGS
+   Example:
+   Filter Expenses
+   Expense Summary
+   All Expenses
+   --------------------------------------------------------- */
+
+h2 {
+    margin-top: 30px;
+
+    margin-bottom: 15px;
+
+    font-size: 20px;
+}
+
+
+/* ---------------------------------------------------------
+   4. ADD EXPENSE FORM
+   --------------------------------------------------------- */
+
+#expense-form {
+    /*
+       Flex places input elements beside each other
+       instead of putting each one on a separate line.
+    */
+    display: flex;
+
+    /*
+       If screen becomes too small,
+       inputs can move to the next row.
+    */
+    flex-wrap: wrap;
+
+    /* Space between inputs */
+    gap: 10px;
+
+    /* Space below the form */
+    margin-bottom: 25px;
+
+    /* White container */
+    background-color: white;
+
+    /* Internal spacing */
+    padding: 20px;
+
+    /* Rounded corners */
+    border-radius: 10px;
+
+    /*
+       Adds a soft shadow so the form
+       looks like a card.
+    */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+
+/* ---------------------------------------------------------
+   5. ALL INPUT FIELDS
+   --------------------------------------------------------- */
+
+input {
+    /* Space inside input */
+    padding: 10px;
+
+    /* Text size */
+    font-size: 14px;
+
+    /* Light border */
+    border: 1px solid #ccc;
+
+    /* Rounded corners */
+    border-radius: 6px;
+
+    /*
+       Allows input to grow when space is available.
+    */
+    flex: 1;
+
+    /*
+       Prevents input from becoming extremely small.
+    */
+    min-width: 140px;
+
+    /*
+       Makes padding included inside total width.
+    */
     box-sizing: border-box;
 }
 
-body {
-    margin: 0;
-    font-family: Arial, Helvetica, sans-serif;
-    background: #f5f7fb;
-    color: #1f2937;
+
+/* ---------------------------------------------------------
+   6. INPUT FOCUS
+   Runs when user clicks inside an input.
+   --------------------------------------------------------- */
+
+input:focus {
+    /* Removes browser's default outline */
+    outline: none;
+
+    /* Changes border while typing */
+    border-color: #4a90e2;
+
+    /*
+       Adds a small highlight around focused input.
+    */
+    box-shadow: 0 0 4px rgba(74, 144, 226, 0.4);
 }
 
-.wrap {
-    width: min(1050px, 92%);
-    margin: 40px auto;
-}
 
-.hero {
-    margin-bottom: 24px;
-}
+/* ---------------------------------------------------------
+   7. ALL BUTTONS
+   --------------------------------------------------------- */
 
-.hero h1 {
-    margin: 6px 0;
-    font-size: 42px;
-}
+button {
+    /* Space inside buttons */
+    padding: 10px 16px;
 
-.hero p {
-    margin: 6px 0;
-    color: #64748b;
-}
-
-.tag {
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    font-size: 12px;
-}
-
-.card,
-.stat {
-    background: white;
-    border: 1px solid #e5e7eb;
-    border-radius: 14px;
-    padding: 22px;
-    margin-bottom: 20px;
-}
-
-.card h2 {
-    margin-top: 0;
-}
-
-.grid {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 16px;
-}
-
-label {
-    display: flex;
-    flex-direction: column;
-    gap: 7px;
-    font-weight: 600;
+    /* Text size */
     font-size: 14px;
-}
 
-input,
-select,
-button {
-    font: inherit;
-}
+    /* Removes default button border */
+    border: none;
 
-input,
-select {
-    border: 1px solid #cbd5e1;
-    border-radius: 8px;
-    padding: 11px 12px;
-}
+    /* Rounded corners */
+    border-radius: 6px;
 
-button {
-    border: 0;
-    border-radius: 8px;
-    padding: 11px 16px;
+    /*
+       Shows hand cursor when mouse
+       is placed over button.
+    */
     cursor: pointer;
-    background: #111827;
+
+    /* Smooth hover effect */
+    transition: 0.2s;
+}
+
+
+/* ---------------------------------------------------------
+   8. ADD / UPDATE EXPENSE BUTTON
+   Selects submit button inside expense form.
+   --------------------------------------------------------- */
+
+#expense-form button[type="submit"] {
+    background-color: #2563eb;
+
     color: white;
-    font-weight: 700;
-    margin-top: 16px;
 }
 
-button.secondary {
-    margin-top: 0;
-    background: #e5e7eb;
-    color: #111827;
+
+/* Hover effect */
+
+#expense-form button[type="submit"]:hover {
+    background-color: #1d4ed8;
 }
 
-button.danger {
-    margin: 0;
-    background: #fee2e2;
-    color: #991b1b;
-    padding: 7px 10px;
+
+/* ---------------------------------------------------------
+   9. FILTER BUTTON
+   --------------------------------------------------------- */
+
+#filter-button {
+    background-color: #333;
+
+    color: white;
+
+    margin-left: 5px;
 }
 
-.stats {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 18px;
+
+/* Filter button hover */
+
+#filter-button:hover {
+    background-color: #111;
 }
 
-.stat {
+
+/* ---------------------------------------------------------
+   10. FILTER INPUT SECTION
+
+   These IDs are our category and date filter fields.
+   --------------------------------------------------------- */
+
+#filter-category,
+#filter-date {
+    margin-bottom: 10px;
+}
+
+
+/* ---------------------------------------------------------
+   11. EXPENSE SUMMARY
+   --------------------------------------------------------- */
+
+#total-expense {
+    /* Makes total amount bold */
+    font-weight: bold;
+
+    /* Makes amount slightly larger */
+    font-size: 18px;
+}
+
+
+/* Container holding category-wise totals */
+
+#category-summary {
+    background-color: white;
+
+    padding: 15px;
+
+    border-radius: 8px;
+
+    margin-bottom: 25px;
+
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+
+/* Individual category summary */
+
+#category-summary p {
+    margin: 8px 0;
+}
+
+
+/* ---------------------------------------------------------
+   12. EXPENSE LIST CONTAINER
+   --------------------------------------------------------- */
+
+#expense-list {
+    margin-top: 10px;
+}
+
+
+/* ---------------------------------------------------------
+   13. EACH EXPENSE ROW
+
+   JavaScript creates expenses like:
+
+   <p>
+       Food - ₹500 - Dinner
+       <button>Edit</button>
+       <button>Delete</button>
+   </p>
+   --------------------------------------------------------- */
+
+#expense-list p {
+    /* White card */
+    background-color: white;
+
+    /* Internal space */
+    padding: 15px;
+
+    /* Space between expense cards */
+    margin: 10px 0;
+
+    /* Rounded corners */
+    border-radius: 8px;
+
+    /*
+       Allows text and buttons to appear
+       neatly on same row.
+    */
     display: flex;
-    flex-direction: column;
-    gap: 8px;
-}
 
-.stat span {
-    color: #64748b;
-}
-
-.stat strong {
-    font-size: 28px;
-}
-
-.head {
-    display: flex;
+    /* Vertically centers content */
     align-items: center;
-    justify-content: space-between;
-    gap: 16px;
-}
 
-.filters {
-    display: flex;
-    gap: 8px;
-    align-items: center;
-}
-
-.tableWrap {
-    overflow-x: auto;
-}
-
-table {
-    width: 100%;
-    border-collapse: collapse;
-}
-
-th,
-td {
-    text-align: left;
-    padding: 12px 8px;
-    border-bottom: 1px solid #e5e7eb;
-}
-
-th {
-    font-size: 13px;
-    color: #64748b;
-}
-
-.catSum {
-    display: flex;
-    flex-wrap: wrap;
+    /*
+       Gives some space between
+       expense text and buttons.
+    */
     gap: 10px;
+
+    /* Soft shadow */
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
 }
 
-.pill {
-    background: #f1f5f9;
-    border-radius: 999px;
-    padding: 8px 12px;
+
+/* ---------------------------------------------------------
+   14. EDIT BUTTON
+
+   Inside every expense <p>,
+   Edit is the first button.
+   --------------------------------------------------------- */
+
+#expense-list p button:first-of-type {
+    background-color: #f59e0b;
+
+    color: white;
+
+    /*
+       Pushes buttons towards right side.
+    */
+    margin-left: auto;
 }
 
-#msg {
-    min-height: 20px;
-    font-weight: 600;
+
+/* Edit hover */
+
+#expense-list p button:first-of-type:hover {
+    background-color: #d97706;
 }
 
-@media (max-width: 700px) {
-    .grid,
-    .stats {
-        grid-template-columns: 1fr;
+
+/* ---------------------------------------------------------
+   15. DELETE BUTTON
+
+   Delete is the last button inside every expense row.
+   --------------------------------------------------------- */
+
+#expense-list p button:last-of-type {
+    background-color: #dc2626;
+
+    color: white;
+}
+
+
+/* Delete hover */
+
+#expense-list p button:last-of-type:hover {
+    background-color: #b91c1c;
+}
+
+
+/* ---------------------------------------------------------
+   16. RESPONSIVE DESIGN
+
+   This runs when screen width becomes 600px or smaller,
+   such as mobile phones.
+   --------------------------------------------------------- */
+
+@media (max-width: 600px) {
+
+    body {
+        /* Less margin on small screens */
+        margin: 10px auto;
+
+        padding: 10px;
     }
 
-    .head {
-        align-items: flex-start;
+
+    #expense-form {
+        /*
+           On small screens, arrange inputs
+           vertically.
+        */
         flex-direction: column;
     }
 
-    .filters {
+
+    input {
+        /*
+           Inputs take complete width.
+        */
         width: 100%;
-        flex-wrap: wrap;
     }
 
-    .hero h1 {
-        font-size: 34px;
+
+    #filter-category,
+    #filter-date,
+    #filter-button {
+        width: 100%;
+
+        margin: 5px 0;
+    }
+
+
+    #expense-list p {
+        /*
+           Expense text/buttons go vertically
+           on small screens.
+        */
+        flex-direction: column;
+
+        align-items: stretch;
+    }
+
+
+    #expense-list p button:first-of-type {
+        /*
+           Remove right pushing behavior
+           on mobile.
+        */
+        margin-left: 0;
     }
 }

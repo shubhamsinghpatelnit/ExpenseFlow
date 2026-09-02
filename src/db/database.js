@@ -1,25 +1,22 @@
-const sqlite3 = require("sqlite3").verbose();
-const path = require("path");
+const mysql = require("mysql2");
 
-const dbPath = path.join(__dirname, "../../data/expenses.db");
-const db = new sqlite3.Database(dbPath, (err) => {
+require("dotenv").config();
+
+const connection = mysql.createConnection({
+    host: process.env.DB_HOST,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME
+});
+
+connection.connect((err) => {
+
     if (err) {
-        console.error("Database connection failed:", err.message);
+        console.log("Database connection failed:", err);
         return;
     }
 
-    console.log("Connected to SQLite database.");
+    console.log("Connected to MySQL database");
 });
 
-db.run(`
-    CREATE TABLE IF NOT EXISTS expenses (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        amount REAL NOT NULL,
-        category TEXT NOT NULL,
-        description TEXT DEFAULT '',
-        date TEXT NOT NULL,
-        created_at TEXT DEFAULT CURRENT_TIMESTAMP
-    )
-`);
-
-module.exports = db;
+module.exports = connection;

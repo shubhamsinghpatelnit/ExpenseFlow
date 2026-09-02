@@ -1,21 +1,20 @@
 const express = require("express");
 const path = require("path");
 
-const expRt = require("./routes/expenseRoutes");
-require("./db/database");
+const expenseRoutes = require("./routes/expenseRoutes");
 
 const app = express();
+
 const port = process.env.PORT || 3000;
 
 app.use(express.json());
+
+// Serve frontend files from public/
 app.use(express.static(path.join(__dirname, "../public")));
 
-app.use("/api/expenses", expRt);
-
-app.get("/api/health", (req, res) => {
-    res.json({ message: "ExpenseFlow API is running" });
-});
+// Expense APIs
+app.use("/api/expenses", expenseRoutes);
 
 app.listen(port, () => {
-    console.log(`ExpenseFlow running at http://localhost:${port}`);
+    console.log(`Server is running on http://localhost:${port}`);
 });

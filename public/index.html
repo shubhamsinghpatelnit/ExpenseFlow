@@ -1,113 +1,64 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ExpenseFlow</title>
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
-    <main class="wrap">
-        <section class="hero">
-            <p class="tag">Simple Expense Management</p>
-            <h1>ExpenseFlow</h1>
-            <p>Track daily expenses, filter them, and understand where your money goes.</p>
-        </section>
 
-        <section class="card">
-            <h2>Add Expense</h2>
+    <h1>ExpenseFlow</h1>
 
-            <form id="expFrm">
-                <div class="grid">
-                    <label>
-                        Amount
-                        <input id="amt" type="number" min="1" step="0.01" placeholder="500" required>
-                    </label>
 
-                    <label>
-                        Category
-                        <select id="cat" required>
-                            <option value="">Select category</option>
-                            <option>Food</option>
-                            <option>Transport</option>
-                            <option>Shopping</option>
-                            <option>Bills</option>
-                            <option>Education</option>
-                            <option>Other</option>
-                        </select>
-                    </label>
+    <!-- ADD EXPENSE FORM -->
+    <form id="expense-form">
 
-                    <label>
-                        Date
-                        <input id="dat" type="date" required>
-                    </label>
+        <input type="number" id="amount" placeholder="Amount" required>
 
-                    <label>
-                        Description
-                        <input id="des" type="text" placeholder="Dinner">
-                    </label>
-                </div>
+        <input type="text" id="category" placeholder="Category" required>
 
-                <button type="submit">Add Expense</button>
-            </form>
+        <input type="text" id="description" placeholder="Description">
 
-            <p id="msg"></p>
-        </section>
+        <input type="date" id="date" required>
 
-        <section class="stats">
-            <div class="stat">
-                <span>Total Expense</span>
-                <strong id="tot">₹0</strong>
-            </div>
+        <button type="submit">
+            Add Expense
+        </button>
 
-            <div class="stat">
-                <span>Entries</span>
-                <strong id="cnt">0</strong>
-            </div>
-        </section>
+    </form>
 
-        <section class="card">
-            <div class="head">
-                <h2>Expenses</h2>
+    
 
-                <div class="filters">
-                    <select id="filCat">
-                        <option value="">All categories</option>
-                        <option>Food</option>
-                        <option>Transport</option>
-                        <option>Shopping</option>
-                        <option>Bills</option>
-                        <option>Education</option>
-                        <option>Other</option>
-                    </select>
 
-                    <input id="filDat" type="date">
-                    <button id="clrBtn" type="button" class="secondary">Clear</button>
-                </div>
-            </div>
+    <!-- FILTER SECTION -->
+    <h2>Filter Expenses</h2>
 
-            <div class="tableWrap">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Date</th>
-                            <th>Category</th>
-                            <th>Description</th>
-                            <th>Amount</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody id="expBody"></tbody>
-                </table>
-            </div>
-        </section>
+    <input type="text" id="filter-category" placeholder="Category">
 
-        <section class="card">
-            <h2>Category Summary</h2>
-            <div id="catSum" class="catSum"></div>
-        </section>
-    </main>
+    <input type="date" id="filter-date">
+
+    <button id="filter-button" type="button">
+        Filter
+    </button>
+
+
+    <!-- EXPENSE LIST -->
+    <h2>All Expenses</h2>
+
+    <div id="expense-list"></div>
+
 
     <script src="script.js"></script>
+
+    <h2>Expense Summary</h2>
+
+    <p>
+        Total Expense: ₹<span id="total-expense">0</span>
+    </p>
+
+    <div id="category-summary"></div>
+
 </body>
+
 </html>

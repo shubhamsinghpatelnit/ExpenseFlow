@@ -1,149 +1,403 @@
-const frm = document.getElementById("expFrm");
-const amt = document.getElementById("amt");
-const cat = document.getElementById("cat");
-const dat = document.getElementById("dat");
-const des = document.getElementById("des");
-const msg = document.getElementById("msg");
+const form = document.getElementById("expense-form");
 
-const body = document.getElementById("expBody");
-const tot = document.getElementById("tot");
-const cnt = document.getElementById("cnt");
-const catSum = document.getElementById("catSum");
+let editingId = null;
 
-const filCat = document.getElementById("filCat");
-const filDat = document.getElementById("filDat");
-const clrBtn = document.getElementById("clrBtn");
 
-dat.value = new Date().toISOString().split("T")[0];
+// ==========================================
+// ADD / UPDATE EXPENSE
+// ==========================================
 
-frm.addEventListener("submit", async (e) => {
-    e.preventDefault();
+form.addEventListener("submit", async (event) => {
 
-    const data = {
-        amount: Number(amt.value),
-        category: cat.value,
-        description: des.value,
-        date: dat.value
+    event.preventDefault();
+
+    const amount =
+        document.getElementById("amount").value;
+
+    const category =
+        document.getElementById("category").value;
+
+    const description =
+        document.getElementById("description").value;
+
+    const date =
+        document.getElementById("date").value;
+
+
+    const expense = {
+        amount,
+        category,
+        description,
+        date
     };
 
-    const res = await fetch("/api/expenses", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(data)
-    });
 
-    const out = await res.json();
+    let response;
 
-    if (!res.ok) {
-        msg.textContent = out.error || "Something went wrong";
-        return;
+
+    // ----------------------------------
+    // CREATE
+    // ----------------------------------
+
+    if (editingId === null) {
+
+        response = await fetch("/api/expenses", {
+
+            method: "POST",
+
+            headers: {
+                "Content-Type": "application/json"
+            },
+
+            body: JSON.stringify(expense)
+        });
+
     }
 
-    msg.textContent = "Expense added successfully";
-    frm.reset();
-    dat.value = new Date().toISOString().split("T")[0];
 
-    await loadExp();
-    await loadSum();
+    // ----------------------------------
+    // UPDATE
+    // ----------------------------------
+
+    else {
+
+        response = await fetch(
+            `/api/expenses/${editingId}`,
+            {
+
+                method: "PUT",
+
+                headers: {
+                    "Content-Type": "application/json"
+                },
+
+                body: JSON.stringify(expense)
+            }
+        );
+    }
+
+
+    const data = await response.json();
+
+    console.log(data);
+
+
+    // Clear form
+    form.reset();
+
+
+    // Return to Add mode
+    editingId = null;
+
+
+    document.querySelector(
+        '#expense-form button[type="submit"]'
+    ).textContent = "Add Expense";
+
+
+    // Refresh expenses
+    await loadExpenses();
+
+
+    // Refresh summary
+    await loadSummary();
 });
 
-filCat.addEventListener("change", loadExp);
-filDat.addEventListener("change", loadExp);
 
-clrBtn.addEventListener("click", () => {
-    filCat.value = "";
-    filDat.value = "";
-    loadExp();
-});
 
-async function loadExp() {
-    const prm = new URLSearchParams();
+// ==========================================
+// LOAD / DISPLAY EXPENSES
+// ==========================================
 
-    if (filCat.value) {
-        prm.set("category", filCat.value);
-    }
+async function loadExpenses(url = "/api/expenses") {
 
-    if (filDat.value) {
-        prm.set("date", filDat.value);
-    }
+    const response = await fetch(url);
 
-    const url = prm.toString()
-        ? `/api/expenses?${prm.toString()}`
-        : "/api/expenses";
+    const expenses = await response.json();
 
-    const res = await fetch(url);
-    const arr = await res.json();
 
-    body.innerHTML = "";
+    const expenseList =
+        document.getElementById("expense-list");
 
-    if (arr.length === 0) {
-        body.innerHTML = `
-            <tr>
-                <td colspan="5">No expenses found.</td>
-            </tr>
-        `;
-        cnt.textContent = "0";
-        return;
-    }
 
-    for (const exp of arr) {
-        const tr = document.createElement("tr");
+    // Remove old displayed expenses
+    expenseList.innerHTML = "";
 
-        tr.innerHTML = `
-            <td>${exp.date}</td>
-            <td>${exp.category}</td>
-            <td>${exp.description || "-"}</td>
-            <td>₹${Number(exp.amount).toFixed(2)}</td>
-            <td>
-                <button class="danger" onclick="delExp(${exp.id})">
-                    Delete
-                </button>
-            </td>
-        `;
 
-        body.appendChild(tr);
-    }
+    expenses.forEach((expense) => {
 
-    cnt.textContent = arr.length;
-}
+        const item =
+            document.createElement("p");
 
-async function delExp(id) {
-    const res = await fetch(`/api/expenses/${id}`, {
-        method: "DELETE"
+
+        item.textContent =
+            `${expense.category} - ₹${expense.amount} - ${expense.description || ""} `;
+
+
+
+        // ==================================
+        // EDIT BUTTON
+        // ==================================
+
+        const editButton =
+            document.createElement("button");
+
+
+        editButton.textContent = "Edit";
+
+
+        editButton.addEventListener("click", () => {
+
+
+            // Put old data into form
+
+            document.getElementById("amount").value =
+                expense.amount;
+
+
+            document.getElementById("category").value =
+                expense.category;
+
+
+            document.getElementById("description").value =
+                expense.description || "";
+
+
+
+            // ----------------------------------
+            // Put old date into form
+            // ----------------------------------
+
+            const expenseDate =
+                new Date(expense.expense_date);
+
+
+            const year =
+                expenseDate.getFullYear();
+
+
+            const month =
+                String(
+                    expenseDate.getMonth() + 1
+                ).padStart(2, "0");
+
+
+            const day =
+                String(
+                    expenseDate.getDate()
+                ).padStart(2, "0");
+
+
+            document.getElementById("date").value =
+                `${year}-${month}-${day}`;
+
+
+
+            // Remember which expense is being edited
+            editingId = expense.id;
+
+
+            // Change submit button
+            document.querySelector(
+                '#expense-form button[type="submit"]'
+            ).textContent = "Update Expense";
+
+
+            console.log(
+                "Editing ID:",
+                editingId
+            );
+        });
+
+
+
+        // ==================================
+        // DELETE BUTTON
+        // ==================================
+
+        const deleteButton =
+            document.createElement("button");
+
+
+        deleteButton.textContent = "Delete";
+
+
+        deleteButton.addEventListener(
+            "click",
+            async () => {
+
+                const response =
+                    await fetch(
+                        `/api/expenses/${expense.id}`,
+                        {
+                            method: "DELETE"
+                        }
+                    );
+
+
+                const data =
+                    await response.json();
+
+
+                console.log(data);
+
+
+                // Refresh expense list
+                await loadExpenses();
+
+
+                // Refresh summary
+                await loadSummary();
+            }
+        );
+
+
+
+        // Add buttons to expense
+        item.appendChild(editButton);
+
+        item.appendChild(deleteButton);
+
+
+        // Add expense to page
+        expenseList.appendChild(item);
     });
-
-    const out = await res.json();
-
-    if (!res.ok) {
-        alert(out.error || "Delete failed");
-        return;
-    }
-
-    await loadExp();
-    await loadSum();
 }
 
-async function loadSum() {
-    const res = await fetch("/api/expenses/summary");
-    const data = await res.json();
 
-    tot.textContent = `₹${Number(data.total).toFixed(2)}`;
-    catSum.innerHTML = "";
 
-    if (data.byCategory.length === 0) {
-        catSum.textContent = "No category data yet.";
-        return;
-    }
+// ==========================================
+// LOAD SUMMARY
+// ==========================================
 
-    for (const item of data.byCategory) {
-        const div = document.createElement("div");
-        div.className = "pill";
-        div.textContent = `${item.category}: ₹${Number(item.total).toFixed(2)}`;
-        catSum.appendChild(div);
-    }
+async function loadSummary() {
+
+    const response =
+        await fetch("/api/expenses/summary");
+
+
+    const summary =
+        await response.json();
+
+
+
+    // ----------------------------------
+    // TOTAL EXPENSE
+    // ----------------------------------
+
+    document.getElementById(
+        "total-expense"
+    ).textContent =
+        summary.total || 0;
+
+
+
+    // ----------------------------------
+    // CATEGORY WISE SUMMARY
+    // ----------------------------------
+
+    const categorySummary =
+        document.getElementById(
+            "category-summary"
+        );
+
+
+    // Remove old category summary
+    categorySummary.innerHTML = "";
+
+
+    summary.categoryWise.forEach(
+        (item) => {
+
+            const p =
+                document.createElement("p");
+
+
+            p.textContent =
+                `${item.category}: ₹${item.total}`;
+
+
+            categorySummary.appendChild(p);
+        }
+    );
 }
 
-loadExp();
-loadSum();
+
+
+// ==========================================
+// FILTER EXPENSES
+// ==========================================
+
+const filterButton =
+    document.getElementById(
+        "filter-button"
+    );
+
+
+filterButton.addEventListener(
+    "click",
+    async () => {
+
+
+        const category =
+            document.getElementById(
+                "filter-category"
+            ).value;
+
+
+        const date =
+            document.getElementById(
+                "filter-date"
+            ).value;
+
+
+
+        let url = "/api/expenses";
+
+
+
+        // Category + Date
+        if (category && date) {
+
+            url +=
+                `?category=${category}&date=${date}`;
+        }
+
+
+        // Only Category
+        else if (category) {
+
+            url +=
+                `?category=${category}`;
+        }
+
+
+        // Only Date
+        else if (date) {
+
+            url +=
+                `?date=${date}`;
+        }
+
+
+
+        console.log(
+            "Filter URL:",
+            url
+        );
+
+
+        // Display filtered expenses
+        await loadExpenses(url);
+    }
+);
+
+
+
+// ==========================================
+// RUN WHEN PAGE LOADS
+// ==========================================
+
+loadExpenses();
+
+loadSummary();

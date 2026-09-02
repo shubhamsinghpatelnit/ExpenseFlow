@@ -1,134 +1,190 @@
 # ExpenseFlow
 
-ExpenseFlow is a simple full-stack expense management application built for learning backend development and explaining a real project in SDE interviews.
+ExpenseFlow is a full-stack expense management web application built with **Node.js, Express.js, MySQL, HTML, CSS, and Vanilla JavaScript**.
 
-## Objective
-
-The project helps users record and organize day-to-day expenses so they can understand where their money is being spent.
-
-## Tech Stack
-
-- Frontend: HTML, CSS, JavaScript
-- Backend: Node.js, Express.js
-- Database: SQLite
+The project allows users to add, view, edit, update, delete, filter, and summarize expenses through a simple web interface.
 
 ## Features
 
-- Add a new expense
+- Add new expenses
 - View all expenses
-- View a single expense
-- Update an expense through the API
-- Delete an expense
+- Edit and update existing expenses
+- Delete expenses
 - Filter expenses by category
 - Filter expenses by date
-- Calculate total spending
-- Show category-wise spending summary
-- Persistent SQLite storage
-- Basic validation and error handling
+- Filter by category and date together
+- View total expense amount
+- View category-wise expense totals
+- Automatic UI refresh after add, update, and delete
+- Responsive frontend styling
+- MySQL database integration
+- Environment variables for database credentials
+
+## Tech Stack
+
+### Frontend
+- HTML
+- CSS
+- Vanilla JavaScript
+
+### Backend
+- Node.js
+- Express.js
+
+### Database
+- MySQL
+- mysql2
+
+### Other
+- dotenv
 
 ## Project Structure
 
 ```text
-ExpenseFlow/
-|
-|-- src/
-|   |-- server.js
-|   |-- routes/
-|   |   `-- expenseRoutes.js
-|   |-- controllers/
-|   |   `-- expenseController.js
-|   |-- db/
-|   |   `-- database.js
-|   `-- utils/
-|       `-- validation.js
-|
-|-- public/
-|   |-- index.html
-|   |-- style.css
-|   `-- script.js
-|
-|-- data/
-|   `-- expenses.db   # created automatically when the app runs
-|
-|-- package.json
-|-- .gitignore
-`-- README.md
+ExpenseFlow-Learn/
+├── public/
+│   ├── index.html
+│   ├── style.css
+│   └── script.js
+├── src/
+│   ├── controllers/
+│   │   └── expenseController.js
+│   ├── db/
+│   │   └── database.js
+│   ├── routes/
+│   │   └── expenseRoutes.js
+│   └── server.js
+├── .env
+├── .gitignore
+├── package.json
+└── package-lock.json
 ```
+
+> `.env` is intentionally ignored by Git and should never be pushed to GitHub.
 
 ## API Endpoints
 
-### Create expense
-`POST /api/expenses`
+| Method | Endpoint | Description |
+|---|---|---|
+| POST | `/api/expenses` | Create a new expense |
+| GET | `/api/expenses` | Get all expenses |
+| GET | `/api/expenses/:id` | Get one expense by ID |
+| PUT | `/api/expenses/:id` | Update an expense |
+| DELETE | `/api/expenses/:id` | Delete an expense |
+| GET | `/api/expenses?category=Food` | Filter by category |
+| GET | `/api/expenses?date=2026-09-03` | Filter by date |
+| GET | `/api/expenses?category=Food&date=2026-09-03` | Filter by category and date |
+| GET | `/api/expenses/summary` | Get total and category-wise summary |
 
-Example body:
+## Database Setup
 
-```json
-{
-  "amount": 500,
-  "category": "Food",
-  "description": "Dinner",
-  "date": "2026-08-19"
-}
+Create a MySQL database:
+
+```sql
+CREATE DATABASE expenseflow_learn;
+USE expenseflow_learn;
 ```
 
-### Get all expenses
-`GET /api/expenses`
+Create the `expenses` table:
 
-Optional filters:
+```sql
+CREATE TABLE expenses (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    amount DECIMAL(10,2) NOT NULL,
+    category VARCHAR(100) NOT NULL,
+    description VARCHAR(255),
+    expense_date DATE NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+```
 
-`GET /api/expenses?category=Food`
+## Environment Variables
 
-`GET /api/expenses?date=2026-08-19`
+Create a `.env` file in the project root:
 
-### Get one expense
-`GET /api/expenses/:id`
+```env
+DB_HOST=localhost
+DB_USER=root
+DB_PASSWORD=your_mysql_password
+DB_NAME=expenseflow_learn
+```
 
-### Update expense
-`PUT /api/expenses/:id`
+Do not commit your `.env` file.
 
-### Delete expense
-`DELETE /api/expenses/:id`
+## Installation
 
-### Expense summary
-`GET /api/expenses/summary`
+Clone the repository and enter the project directory:
 
-## Run Locally
+```bash
+git clone <your-repository-url>
+cd ExpenseFlow-Learn
+```
 
-1. Install Node.js.
-2. Open this project in a terminal.
-3. Run:
+Install dependencies:
 
 ```bash
 npm install
+```
+
+Create the `.env` file with your MySQL configuration.
+
+Start the server:
+
+```bash
 npm start
 ```
 
-4. Open:
+Open:
 
 ```text
 http://localhost:3000
 ```
 
-## Backend Flow
+## How It Works
+
+The frontend sends HTTP requests using the Fetch API.
 
 ```text
-Frontend
-   |
-   v
-Express Route
-   |
-   v
+Browser
+   ↓
+Express Routes
+   ↓
 Controller
-   |
-   v
-SQLite Database
-   |
-   v
+   ↓
+MySQL
+   ↓
 JSON Response
+   ↓
+Frontend UI
 ```
 
-## Interview Explanation
+For example, when a user adds an expense:
 
-ExpenseFlow is a REST-based expense management application. The frontend sends HTTP requests to an Express backend. Express routes forward those requests to controller functions, which validate the input and execute SQLite queries. The application supports CRUD operations, filtering, and spending summaries.
+```text
+Form Submit
+   ↓
+POST /api/expenses
+   ↓
+createExpense controller
+   ↓
+INSERT INTO expenses
+   ↓
+MySQL
+   ↓
+JSON response
+   ↓
+Expense list and summary refresh
+```
 
-The project intentionally uses a simple architecture so every part can be understood and explained clearly.
+## Future Improvements
+
+- Improved frontend error handling
+- More input validation
+- Pagination
+- Authentication
+- Monthly analytics and charts
+- Deployment
+
+## Author
+
+**Shubham Singh**
